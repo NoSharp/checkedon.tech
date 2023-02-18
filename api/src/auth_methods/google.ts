@@ -12,7 +12,7 @@ passport.use(
     {
       clientID: googleClientId,
       clientSecret: googleClientSecret,
-      callbackURL: "/auth/redirect/google",
+      callbackURL: "https://checkedon.tech/api/auth/redirect/google",
     },
     async (accessToken: string, refreshToken: string, profile, done) => {
       const googleId = profile.id;

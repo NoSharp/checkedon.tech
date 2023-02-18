@@ -6,7 +6,9 @@ import user from "../controllers/user";
 passport.use(
   new Strategy(
     {
-      jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt"),
+      jwtFromRequest: (req)=>{
+        return (req && req.cookies && req.cookies['access_token'] ? req.cookies['access_token'] : null)
+      },
       secretOrKey: Envuments.get("JWT_SECRET"),
       issuer: "api.checkedon.tech",
       audience: "api.checkedon.tech",

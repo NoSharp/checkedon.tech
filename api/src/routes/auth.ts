@@ -2,12 +2,14 @@ import { Router } from "express";
 import passport from "passport";
 import { generateJWT } from "../utils/jwt_gen";
 
-async function setUserToken(req: any, res: any) {
-  const userId = req.user.id;
-  res.send({
-    token: generateJWT(userId),
-  });
-}
+// async function setUserToken(req: any, res) {
+//   const userId = req.user.id;
+  
+  
+//   // send({
+//   //   token: ,
+//   // });
+// }
 
 const router = Router({
   mergeParams: true,
@@ -26,7 +28,12 @@ router.get(
   passport.authenticate("google", {
     session: false,
   }),
-  setUserToken
+  (req, res)=>{
+    const userId = (req.user as any).id;
+    res
+      .cookie("access_token", generateJWT(userId))
+      .redirect("/");
+  }
 );
 
 export { router };

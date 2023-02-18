@@ -1,6 +1,6 @@
 import { Envuments } from "envuments";
 import express from "express";
-import session from "express-session";
+import cookieParser from "cookie-parser";
 import passport from "passport";
 import fs from "fs";
 import https from "https";
@@ -23,6 +23,7 @@ const redisSessionClient = createClient({
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 app.use(passport.initialize());
 
 app.use("/api/auth", AuthRoutes);
