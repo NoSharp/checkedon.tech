@@ -6,6 +6,9 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Setup from "./pages/Setup";
 import NoPage from "./pages/NoPage";
+import Account from "./pages/Account";
+import Login from "./pages/Login";
+import "./index.css";
 
 
 export default function App() {
@@ -16,6 +19,8 @@ export default function App() {
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
             <Route path="setup" element={<Setup />} />
+            <Route path="login" element={<Login />} />
+            <Route path="account" element={<Account />} />
             <Route path="*" element={<NoPage />} />
           </Route>
         </Routes>
