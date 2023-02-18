@@ -8,7 +8,6 @@ function Account() {
     const [value, setValue] = useState('');
 
     const sendPhoneNumber = () => {
-        console.log(value)
     }
 
     return (
