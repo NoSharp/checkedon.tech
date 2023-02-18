@@ -16,6 +16,7 @@ function Account() {
     
     const sendPhoneNumber = () => {
         console.log(value);
+        console.log(value)
     }
 
     return (
