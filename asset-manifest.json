@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.js": "/NoSharp/checkedon.tech/static/js/main.7a647d05.js",
-    "index.html": "/NoSharp/checkedon.tech/index.html",
-    "main.7a647d05.js.map": "/NoSharp/checkedon.tech/static/js/main.7a647d05.js.map"
+    "main.js": "/NoSharp/checkedon.tech/tree/gh-pages/static/js/main.7a647d05.js",
+    "index.html": "/NoSharp/checkedon.tech/tree/gh-pages/index.html",
+    "main.7a647d05.js.map": "/NoSharp/checkedon.tech/tree/gh-pages/static/js/main.7a647d05.js.map"
   },
   "entrypoints": [
     "static/js/main.7a647d05.js"
