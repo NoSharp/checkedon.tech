@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.js": "/checkedon.tech/static/js/main.c4a7789d.js",
-    "index.html": "/checkedon.tech/index.html",
-    "main.c4a7789d.js.map": "/checkedon.tech/static/js/main.c4a7789d.js.map"
+    "main.js": "/static/js/main.c4a7789d.js",
+    "index.html": "/index.html",
+    "main.c4a7789d.js.map": "/static/js/main.c4a7789d.js.map"
   },
   "entrypoints": [
     "static/js/main.c4a7789d.js"
