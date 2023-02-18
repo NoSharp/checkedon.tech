@@ -2,7 +2,9 @@ import React from 'react';
 
 function Home() {
     return (
-        <h1>this is the homepage</h1>
+        <section>
+        <h2>this is the homepage</h2>
+        </section>
     );
 }
 
