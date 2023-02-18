@@ -12,7 +12,6 @@ passport.use(
       audience: "api.checkedon.tech",
     },
     async (jwtPayload, cb) => {
-      console.log(jwtPayload);
       const foundUser = await user.findFirst({
         where: {
           id: jwtPayload.userId,
