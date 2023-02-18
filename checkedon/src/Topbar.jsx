@@ -1,7 +1,7 @@
 import React from "react";
+import Cookies from 'js-cookie';
 import { Link } from "react-router-dom";
 import "./index.css";
-import Cookies from 'js-cookie';
 
 const user = "lmao";
 
@@ -9,7 +9,6 @@ class LoginControl extends React.Component {
     render() {
         let output;
         const accessToken = Cookies.get('access_token');
-        console.log(accessToken);
 
         if (accessToken) {
             output = <><p>Welcome {user}!</p><Link to="/account"><button>Your Account</button></Link></>
