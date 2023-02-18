@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,12 +7,68 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  background-color: rgb(53, 53, 53);
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+main {
+  margin-top: 2rem;
+  width: 1000px;
+  background-color: aliceblue;
+  height: 100vh;
+  border-radius: 2%;
+
+}
+
+h1 {
+  font-family: 'Source Code Pro', Courier, monospace;
+  text-align: center;
+  font-size: 4rem;
+  margin: 0;
+}
+
+nav {
+  background-color: #222222;
+  height: 60px;
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+nav a {
+  height: 100%;
+  color: #ffffff !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  text-decoration: none;
+  -webkit-transition: all 100ms ease-out;
+  transition: all 100ms ease-out;
+  cursor: pointer;
+  border-bottom: 0px solid #ffc0c2;
+  text-transform: uppercase;
+  flex-grow: 1;
+}
+
+nav a:hover {
+  border-bottom: 4px solid #ffc0c2;
+  background-color: #111111;
+  -webkit-transition: all 100ms ease-out;
+  transition: all 100ms ease-out;
+  color: #ffc0c2 !important;
+}
+
 
 .login-button {
   background-color: aliceblue;
