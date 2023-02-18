@@ -1,25 +1,31 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./index.css";
+import Cookies from 'js-cookie';
 
 const user = "lmao";
-const signedIn = true;
 
 class LoginControl extends React.Component {
     render() {
         let output;
-        if (signedIn) {
-            output = <><p>Welcome {user}!</p><button>Your Account</button></>
+        const accessToken = Cookies.get('access_token');
+        console.log(accessToken);
+
+        if (accessToken) {
+            output = <><p>Welcome {user}!</p><Link to="/account"><button>Your Account</button></Link></>
         } else {
-            output = <Link href="/login"><button>Sign Up!</button></Link>
+            output = <Link to="/login"><button>Sign Up!</button></Link>
         }
 
         return (
-            <>
+            <div style={{display: "flex", flexDirection: "row", flexGrow: "1", alignSelf: "center"}}>
                 {output}
-            </>
+            </div>
         )
     }
 }
+
+
 
 function Topbar() {
     return (
@@ -35,4 +41,4 @@ function Topbar() {
     );
 }
 
-export default Topbar
+export default Topbar;
