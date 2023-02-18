@@ -16,6 +16,16 @@ model User {
   userName        String
   googleId        String            @unique
   UserAlertMethod UserAlertMethod[]
+  UserLocations   UserLocations[]
+}
+
+model UserLocations {
+  id        Int     @id @default(autoincrement())
+  latitude  Float
+  longitude Float
+  niceName  String
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id])
 }
 
 model UserAlertMethod {
