@@ -7,11 +7,16 @@ import https from "https";
 import { OAuth2Strategy as GoogleAuthStrategry } from "passport-google-oauth";
 import {router as AuthController} from "./controllers/auth";
 import connRedis from "connect-redis";
-import { redisClient } from "./redis";
+import { createClient } from "redis";
+import { Logger } from "tslog";
+
+const InitializationLogger = new Logger({name: "Initialization"});
 
 const RedisStore = connRedis(session);
 // Bootstrap redis.
-redisClient.connect().catch(console.error);
+const RedisSessionClient = createClient({
+  url: Envuments.get("REDIS_CONNECTION_URL")
+});
 
 const googleClientId = Envuments.get("GOOGLE_CLIENT_ID") ?? "";
 const googleClientSecret = Envuments.get("GOOGLE_CLIENT_SECRET") ?? "";
@@ -47,7 +52,7 @@ app.use(
   session({
     secret: Envuments.get("SESSION_SECRET"),
     resave: false,
-    store: new RedisStore({client: redisClient})
+    store: new RedisStore({client: RedisSessionClient})
   })
 );
 
@@ -59,7 +64,12 @@ app.use("/auth", AuthController);
 const httpsServer = https.createServer({
   key: fs.readFileSync(Envuments.get("SSL_PRIVATE_KEY_PATH")),
   cert: fs.readFileSync(Envuments.get("SSL_CERT_PATH"))
-}, app)
+}, app);
 
-
-httpsServer.listen(443);
+(async () => {
+  InitializationLogger.info("Connecting to Redis");
+  await RedisSessionClient.connect();
+  InitializationLogger.info("Connected to Redis");
+  httpsServer.listen(443);
+  InitializationLogger.info("Api is listening on port 443.");
+})();
