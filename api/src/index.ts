@@ -5,8 +5,13 @@ import passport from "passport";
 import fs from "fs";
 import https from "https";
 import { OAuth2Strategy as GoogleAuthStrategry } from "passport-google-oauth";
-
 import {router as AuthController} from "./controllers/auth";
+import connRedis from "connect-redis";
+import { redisClient } from "./redis";
+
+const RedisStore = connRedis(session);
+// Bootstrap redis.
+redisClient.connect().catch(console.error);
 
 const googleClientId = Envuments.get("GOOGLE_CLIENT_ID") ?? "";
 const googleClientSecret = Envuments.get("GOOGLE_CLIENT_SECRET") ?? "";
@@ -41,7 +46,8 @@ app.use(express.json());
 app.use(
   session({
     secret: Envuments.get("SESSION_SECRET"),
-    resave: false
+    resave: false,
+    store: new RedisStore({client: redisClient})
   })
 );
 
@@ -54,5 +60,6 @@ const httpsServer = https.createServer({
   key: fs.readFileSync(Envuments.get("SSL_PRIVATE_KEY_PATH")),
   cert: fs.readFileSync(Envuments.get("SSL_CERT_PATH"))
 }, app)
+
 
 httpsServer.listen(443);
