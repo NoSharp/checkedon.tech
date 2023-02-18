@@ -27,7 +27,5 @@ BEGIN
     SET a = sin(latDiff/2) * sin(lonDiff / 2) + cos(lat1Pi180) * cos(lat2Pi180) * sin(lonDiff/2) * sin(lonDiff/2);
     SET c = 2 * atan2(sqrt(a), sqrt(1-a));
 
-    RETURN (earthRadius * c) / 3;
+    RETURN ROUND((earthRadius * c) / 1000, 3);
 end;
-
-SELECT distance(52.5144668025837, -1.9688887936005763, 51.94434914229727, 5.308123255734208);
