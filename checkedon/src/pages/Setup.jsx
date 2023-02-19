@@ -2,7 +2,9 @@ import React from 'react';
 
 function Setup() {
     return (
-        <h2>this is the homepage</h2>
+        <section>
+            <h2>this is the setup page</h2>
+        </section>
     );
 }
 
