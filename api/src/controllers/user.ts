@@ -36,39 +36,38 @@ export async function setPhoneNumber(userId: number, phoneNumber: string) {
   });
 }
 
-export async function deletePhoneNumber(userId: number, phoneNumber: string) {
-  return await prismaClient.userAlertMethod.deleteMany({
-    where: {
-      userId: userId,
-      methodMetaData: phoneNumber,
-    },
-  });
-}
-
-export async function getSMSConnections(userId: number) {
+export async function getConnections(userId: number, method: string) {
   return await prismaClient.userAlertMethod.findMany({
     where: {
-      method: "sms",
+      method: method,
       userId: userId,
     },
   });
 }
 
-export async function addSMSConnection(userId: number, phoneNumber: string) {
+export async function addConnection(
+  userId: number,
+  method: string,
+  phoneNumber: string
+) {
   return await prismaClient.userAlertMethod.create({
     data: {
       userId: userId,
-      method: "sms",
+      method: method,
       methodMetaData: phoneNumber,
     },
   });
 }
 
-export async function deleteSMSConnection(userId: number, phoneNumber: string) {
+export async function deleteConnection(
+  userId: number,
+  method: string,
+  phoneNumber: string
+) {
   return await prismaClient.userAlertMethod.deleteMany({
     where: {
       userId: userId,
-      method: "sms",
+      method: method,
       methodMetaData: phoneNumber,
     },
   });

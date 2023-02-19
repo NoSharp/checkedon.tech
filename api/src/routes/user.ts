@@ -3,11 +3,11 @@ import passport from "passport";
 import { z } from "zod";
 import user, {
   addLocation,
-  addSMSConnection,
+  addConnection,
   deleteLocation,
-  deletePhoneNumber,
+  deleteConnection,
   getLocations,
-  getSMSConnections,
+  getConnections,
 } from "../controllers/user";
 
 const router = Router({
@@ -24,6 +24,12 @@ const SMSAddBody = z.object({
   phoneNumber: z.string().regex(/^\+[1-9]\d{1,14}$/),
 });
 type SMSAddBody = z.infer<typeof SMSAddBody>;
+
+const EmailAddBody = z.object({
+  email: z.string().email()
+});
+type EmailAddBody = z.infer<typeof EmailAddBody>;
+
 
 router.put(
   "/location/:name",
@@ -78,7 +84,7 @@ router.get(
     if (!req.user) return;
     const userId = (req.user as any).id;
 
-    res.send(await getSMSConnections(userId));
+    res.send(await getConnections(userId, "sms"));
   }
 );
 
@@ -90,7 +96,7 @@ router.put(
     try {
       const userId = (req.user as any).id;
       const data = await SMSAddBody.parseAsync(req.body);
-      res.send(await addSMSConnection(userId, data.phoneNumber));
+      res.send(await addConnection(userId, "sms", data.phoneNumber));
     } catch (ex) {
       // pass.
       res.send(400);
@@ -105,7 +111,49 @@ router.delete(
     if (!req.user) return;
     try {
       const userId = (req.user as any).id;
-      res.send(await deletePhoneNumber(userId, req.params.phoneNumber));
+      res.send(await deleteConnection(userId, "sms", req.params.phoneNumber));
+    } catch (ex) {
+      // pass.
+      res.send(400);
+    }
+  }
+);
+
+router.get(
+  "/connections/email",
+  passport.authenticate(["jwt"], { session: false }),
+  async (req, res) => {
+    if (!req.user) return;
+    const userId = (req.user as any).id;
+
+    res.send(await getConnections(userId, "email"));
+  }
+);
+
+router.put(
+  "/connections/email",
+  passport.authenticate(["jwt"], { session: false }),
+  async (req, res) => {
+    if (!req.user) return;
+    try {
+      const userId = (req.user as any).id;
+      const data = await EmailAddBody.parseAsync(req.body);
+      res.send(await addConnection(userId, "email", data.email));
+    } catch (ex) {
+      // pass.
+      res.send(400);
+    }
+  }
+);
+
+router.delete(
+  "/connections/email/:phoneNumber",
+  passport.authenticate(["jwt"], { session: false }),
+  async (req, res) => {
+    if (!req.user) return;
+    try {
+      const userId = (req.user as any).id;
+      res.send(await deleteConnection(userId, "email", req.params.phoneNumber));
     } catch (ex) {
       // pass.
       res.send(400);
