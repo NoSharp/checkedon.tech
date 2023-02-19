@@ -56,7 +56,7 @@ async function getConnections(userId: number) {
       const data: any[] = (await getAllLocationsInDistance(
         quake.lat,
         quake.lon,
-        10000
+        300
       )) as any[];
       for (const it of data) {
         const userId = it.id;
