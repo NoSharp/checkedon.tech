@@ -1,17 +1,18 @@
 import React from "react";
 import Cookies from 'js-cookie';
+import getUserData from "./apiHandler";
 import { Link } from "react-router-dom";
 import "./index.css";
 
-const user = "lmao";
-
 class LoginControl extends React.Component {
-    render() {
+    async render() {
         let output;
         const accessToken = Cookies.get('access_token');
 
         if (accessToken) {
-            output = <><p>Welcome {user}!</p><Link to="/account"><button>Your Account</button></Link></>
+            const username = await getUserData();
+            console.log(username);
+            output = <><p>Welcome {username}!</p><Link to="/account"><button>Your Account</button></Link></>
         } else {
             output = <Link to="/login"><button>Sign Up!</button></Link>
         }
@@ -23,8 +24,6 @@ class LoginControl extends React.Component {
         )
     }
 }
-
-
 
 function Topbar() {
     return (
