@@ -26,7 +26,7 @@ class LoginControl extends React.Component {
 function Topbar() {
     return (
         <div className="topbar">
-            <h1>>checkedOn_</h1>
+            <h1>{">"}checkedOn_</h1>
             <nav>
                 <Link to="/">Home</Link>
                 <Link to="/setup">Setup</Link>
