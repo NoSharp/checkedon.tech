@@ -3,7 +3,7 @@ import { QuakeData } from "./quakeData";
 
 
 export function getDateTimeStamp(date: Date) {
-  return `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDate()}T${date.getUTCHours()}:${date.getUTCMinutes()}:00`;
+  return `${date.getUTCFullYear()}-${date.getUTCMonth()+1}-${date.getUTCDate()}T${date.getUTCHours()}:${date.getUTCMinutes()}:00`;
 }
 
 export async function getEarthQuakes(from: String, to: String): Promise<QuakeData[]> {

@@ -45,35 +45,35 @@ async function getConnections(userId: number) {
 
 (async () => {
   conn = await createConnection(Envuments.get("DATABASE_URL"));
-  const quakes = await getEarthQuakes(
-    getDateTimeStamp(new Date(Date.now())),
-    getDateTimeStamp(new Date(Date.now() + 24 * 60 * 60 * 1000))
-  );
 
-  const map: any = {};
-  for (const quake of quakes) {
-    const data: any[] = (await getAllLocationsInDistance(
-      quake.lat,
-      quake.lon,
-      10000
-    )) as any[];
-    for (const it of data) {
-      const userId = it.id;
-      const connections: any[] = (await getConnections(userId)) as any[];
-      for (const conn of connections) {
-        if (conn.method == null) continue;
-        const targetDistributor = distributors[conn.method];
-        if (targetDistributor == null) {
-          console.log("No distributor for: " + conn.method);
-          continue;
+  setInterval(async () => {
+    const quakes = await getEarthQuakes(
+      getDateTimeStamp(new Date(Date.now())),
+      getDateTimeStamp(new Date(Date.now() + 24 * 60 * 60 * 1000))
+    );
+    const map: any = {};
+    for (const quake of quakes) {
+      const data: any[] = (await getAllLocationsInDistance(
+        quake.lat,
+        quake.lon,
+        10000
+      )) as any[];
+      for (const it of data) {
+        const userId = it.id;
+        const connections: any[] = (await getConnections(userId)) as any[];
+        for (const conn of connections) {
+          if (conn.method == null) continue;
+          const targetDistributor = distributors[conn.method];
+          if (targetDistributor == null) {
+            console.log("No distributor for: " + conn.method);
+            continue;
+          }
+
+          targetDistributor.action(conn.methodMetaData, quake);
         }
-
-        targetDistributor.action(conn.methodMetaData, quake);
       }
     }
-  }
-
-  setInterval(async () => {}, 30000);
+  }, 30000);
 
   // console.log();
 })();
