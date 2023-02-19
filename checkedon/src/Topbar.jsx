@@ -4,13 +4,27 @@ import getUserData from "./apiHandler";
 import { Link } from "react-router-dom";
 import "./index.css";
 
+
 class LoginControl extends React.Component {
-    async render() {
+    
+    state = {
+        userName: null
+    };
+
+    componentDidMount(){
+        getUserData().then((userName)=>{
+            this.setState({
+                userName: userName
+            })
+        });
+    }
+    
+    render() {
         let output;
         const accessToken = Cookies.get('access_token');
 
         if (accessToken) {
-            const username = await getUserData();
+            const username = this.state.userName
             console.log(username);
             output = <><p>Welcome {username}!</p><Link to="/account"><button>Your Account</button></Link></>
         } else {
