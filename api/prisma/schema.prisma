@@ -20,17 +20,18 @@ model User {
 }
 
 model UserLocations {
-  id        Int     @id @default(autoincrement())
+  id        Int    @id @default(autoincrement())
   latitude  Float
   longitude Float
   niceName  String
   userId    Int
-  user      User    @relation(fields: [userId], references: [id])
+  user      User   @relation(fields: [userId], references: [id])
 }
 
 model UserAlertMethod {
   id             Int    @id @default(autoincrement())
   userId         Int
   user           User   @relation(fields: [userId], references: [id])
+  method         String
   methodMetaData String
 }
