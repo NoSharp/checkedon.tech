@@ -29,7 +29,6 @@ function Topbar() {
             <h1>{">"}checkedOn_</h1>
             <nav>
                 <Link to="/">Home</Link>
-                <Link to="/setup">Setup</Link>
                 <LoginControl />
                 <Link to="/about">About</Link>
             </nav>
