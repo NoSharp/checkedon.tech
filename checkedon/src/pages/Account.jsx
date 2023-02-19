@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PhoneInput from 'react-phone-number-input';
 import Cookies from 'js-cookie';
-import getUserData, { getPhoneNumber, addPhoneNumber } from "../apiHandler";
+import getUserData, { getPhoneNumber, addPhoneNumber, setUserLocation } from "../apiHandler";
 import "../index.css";
 import 'react-phone-number-input/style.css'
 
@@ -53,6 +53,23 @@ class DisplayPhoneNumber extends React.Component {
     }
 }
 
+class LocationRequest extends React.Component {
+    componentDidMount() {
+        navigator.geolocation.getCurrentPosition((pos)=>{
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+            setUserLocation(lon, lat);
+        },
+        (err)=>{
+            console.log("no pos");
+        })
+    }
+
+    render() {
+        return <></>
+    }
+}
+
 function Account() {
     const accessToken = Cookies.get('access_token');
     if (!accessToken) {
@@ -67,6 +84,7 @@ function Account() {
 
     return (
         <section>
+            <LocationRequest />
             <HelloName />
             <DisplayPhoneNumber />
             <p>Your phonenumber:</p>
