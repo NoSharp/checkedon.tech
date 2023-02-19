@@ -1,52 +1,36 @@
 import React from "react";
 import Cookies from 'js-cookie';
-import getUserData from "./apiHandler";
 import { Link } from "react-router-dom";
 import "./index.css";
 
 
-class LoginControl extends React.Component {
-    
-    state = {
-        userName: null
-    };
-
-    componentDidMount(){
-        getUserData().then((userName)=>{
-            this.setState({
-                userName: userName
-            })
-        });
-    }
-    
+class LoginControl extends React.Component {    
     render() {
         let output;
         const accessToken = Cookies.get('access_token');
 
         if (accessToken) {
-            const username = this.state.userName
-            console.log(username);
-            output = <><p>Welcome {username}!</p><Link to="/account"><button>Your Account</button></Link></>
+            output = <Link to="/account">Your Account</Link>
         } else {
-            output = <Link to="/login"><button>Sign Up!</button></Link>
+            output = <Link to="/login">Sign-In</Link>
         }
 
         return (
-            <div style={{display: "flex", flexDirection: "row", flexGrow: "1", alignSelf: "center"}}>
+            <>
                 {output}
-            </div>
+            </>
         )
     }
 }
 
 function Topbar() {
     return (
-        <div>
-            <h1>CheckedOn</h1>
-            <LoginControl />
+        <div className="topbar">
+            <h1>>checkedOn_</h1>
             <nav>
                 <Link to="/">Home</Link>
                 <Link to="/setup">Setup</Link>
+                <LoginControl />
                 <Link to="/about">About</Link>
             </nav>
         </div>
