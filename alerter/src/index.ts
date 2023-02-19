@@ -1,8 +1,19 @@
-import axios from "axios";
 import { Envuments } from "envuments";
-import { createConnection, Connection } from "mysql2/promise";
-
+import { createConnection, Connection, RowDataPacket } from "mysql2/promise";
+import { QuakeData } from "./quakeData";
+import { getDateTimeStamp, getEarthQuakes } from "./usgs";
 let conn: Connection | undefined;
+
+interface Distributor {
+  method: string;
+  action: (metaData: string, quake: QuakeData) => void;
+}
+
+import SMSDistributor from "./distributors/sms";
+
+const distributors: { [key: string]: Distributor } = {
+  sms: SMSDistributor,
+};
 
 async function getAllLocationsInDistance(
   targetLatitude: number,
@@ -21,39 +32,15 @@ async function getAllLocationsInDistance(
   return data;
 }
 
-function getDateTimeStamp(date: Date) {
-  return `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDate()}T${date.getUTCHours()}:${date.getUTCMinutes()}:00`;
-}
-
-interface QuakeData {
-  magnitude: number;
-  lat: number;
-  lon: number;
-  placeNiceName: string;
-}
-
-async function getEarthQuakes(from: String, to: String): Promise<QuakeData[]> {
-  const data = await axios.get(
-    `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${from}&endtime=${to}&minmagnitude=4`
-  );
-  const quakes: QuakeData[] = [];
-  for (const feature of data.data.features) {
-
-    console.log(feature);
-    const place = feature.properties.place;
-    console.log(place);
-    const mag = feature.properties.mag;
-    const coords = feature.geometry.coordinates;
-    const lat = coords[0];
-    const lon = coords[1];
-    quakes.push({
-      magnitude: mag,
-      placeNiceName: place,
-      lon: lon,
-      lat: lat,
-    });
+async function getConnections(userId: number) {
+  if (conn == null) {
+    throw new Error("cannot connect to mysql.");
   }
-  return quakes;
+  const [data, _] = await conn.execute(
+    `SELECT * FROM UserAlertMethod WHERE userId = ? `,
+    [userId]
+  );
+  return data;
 }
 
 (async () => {
@@ -63,19 +50,30 @@ async function getEarthQuakes(from: String, to: String): Promise<QuakeData[]> {
     getDateTimeStamp(new Date(Date.now() + 24 * 60 * 60 * 1000))
   );
 
-  const map : any = {}
-  for(const quake of quakes){
-    const data : any[] = await getAllLocationsInDistance(quake.lat, quake.lon, 10000) as any[];
-    for(const it of data){
+  const map: any = {};
+  for (const quake of quakes) {
+    const data: any[] = (await getAllLocationsInDistance(
+      quake.lat,
+      quake.lon,
+      10000
+    )) as any[];
+    for (const it of data) {
       const userId = it.id;
-      // TODO: alert lol.
-    }
+      const connections: any[] = (await getConnections(userId)) as any[];
+      for (const conn of connections) {
+        if (conn.method == null) continue;
+        const targetDistributor = distributors[conn.method];
+        if (targetDistributor == null) {
+          console.log("No distributor for: " + conn.method);
+          continue;
+        }
 
+        targetDistributor.action(conn.methodMetaData, quake);
+      }
+    }
   }
 
-  setInterval(async () => {
-
-  }, 30000);
+  setInterval(async () => {}, 30000);
 
   // console.log();
 })();
